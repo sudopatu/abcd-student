@@ -51,8 +51,7 @@ pipeline {
         //         }
         //     }
         // }
-        //labolatorium 2
-        stage('SCA scan') {
+        stage('OSV scan') {
             steps {
                 sh 'mkdir -p results/'
                 sh '''
@@ -61,16 +60,14 @@ pipeline {
                         -p 3000:3000 \
                         bkimminich/juice-shop
                     sleep 5
+                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json
                 '''
             }
-            steps {
-                sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json'
+            post {
+                always {
+                    echo 'Archiving results...'
+                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             }
-        post {
-            always {
-                echo 'Archiving results...'
-                archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
-        }
         }
     }
 }
