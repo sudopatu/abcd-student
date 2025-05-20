@@ -66,7 +66,7 @@ pipeline {
                 always {
                     sh '''
                         echo 'Archiving results and stop...'
-                        archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
                         docker stop juice-shop
                     '''
                 }
