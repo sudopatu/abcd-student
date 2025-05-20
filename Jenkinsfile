@@ -78,7 +78,8 @@ pipeline {
                         ls -la ${WORKSPACE}/results/
                         docker stop juice-shop
                     '''
-                    archiveArtifacts artifacts: '${WORKSPACE}/results/*', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: '${WORKSPACE}/results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
                 }
             }
         }
