@@ -65,7 +65,7 @@ pipeline {
                     echo "Scan completed" 
                     echo "Waiting for osv-scanner process (PID $pid) to finish..."
                     wait $pid
-                    ls -la results/
+                    cat results/sca-osv-scanner.json & ls -la results/
                     wait $!
                     cat results/sca-osv-scanner.json
                 '''
