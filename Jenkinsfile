@@ -55,9 +55,11 @@ pipeline {
                 sh 'mkdir -p results/'
                 sh '''
                     echo 'Run juice-shop...'
+                    ls -la results/
                     docker run --name juice-shop -d --rm \
                         -p 3000:3000 \
                         bkimminich/juice-shop
+                    ls -la results/
                     osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json
                     ls -la results/
                     cat results/sca-osv-scanner.json
