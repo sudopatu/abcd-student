@@ -59,8 +59,11 @@ pipeline {
                     docker run --name juice-shop -d --rm \
                         -p 3000:3000 \
                         bkimminich/juice-shop
-                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
-                    wait $!
+                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
+                    pid=$!
+                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
+                    wait $pid
+                    echo "Scan completed"
                     ls -la results/
                     wait $!
                     cat results/sca-osv-scanner.json
