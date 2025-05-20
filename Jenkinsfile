@@ -59,16 +59,19 @@ pipeline {
                     docker run --name juice-shop -d --rm \
                         -p 3000:3000 \
                         bkimminich/juice-shop
-                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
-                    echo "osv-scanner exited with code $?" & pwd &
-                    pid=$!
-                    echo "Scan completed" 
-                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
-                    wait $pid
-                    cat results/sca-osv-scanner.json & ls -la results/
-                    wait $!
-                    cat results/sca-osv-scanner.json
+                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 '''
+//                                        
+//                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
+//                    echo "osv-scanner exited with code $?" & pwd &
+//                    pid=$!
+//                    echo "Scan completed" 
+//                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
+//                    wait $pid
+//                    cat results/sca-osv-scanner.json & ls -la results/
+//                    wait $!
+//                    cat results/sca-osv-scanner.json
+//                '''
             }
             post {
                 always {
