@@ -59,20 +59,11 @@ pipeline {
                     docker run --name juice-shop -d --rm \
                         -p 3000:3000 \
                         bkimminich/juice-shop
+                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
+                    wait $!
                     ls -la results/
-                    sleep 5                        
-                    pwd
-                    sleep 5
-                    whoami
-                    sleep 5
-                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json
-                    sleep 5
-                    echo 'After run osv-scanner ...'
-                    sleep 5
-                    ls -la results/
-                    sleep 5
+                    wait $!
                     cat results/sca-osv-scanner.json
-                    sleep 5
                 '''
             }
             post {
