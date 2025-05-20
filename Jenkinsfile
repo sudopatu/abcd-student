@@ -76,9 +76,9 @@ pipeline {
                         echo 'Archiving results and stop...'
                         ls -la ${WORKSPACE}
                         ls -la ${WORKSPACE}/results/
-                        archiveArtifacts artifacts: '${WORKSPACE}/results/*', fingerprint: true, allowEmptyArchive: true
                         docker stop juice-shop
                     '''
+                    archiveArtifacts artifacts: '${WORKSPACE}/results/*', fingerprint: true, allowEmptyArchive: true
                 }
             }
         }
