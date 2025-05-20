@@ -60,7 +60,7 @@ pipeline {
                         -p 3000:3000 \
                         bkimminich/juice-shop
                     osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
-                    echo "osv-scanner exited with code $?" &
+                    echo "osv-scanner exited with code $?" & pwd &
                     pid=$!
                     echo "Scan completed" 
                     echo "Waiting for osv-scanner process (PID $pid) to finish..."
