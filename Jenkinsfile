@@ -74,6 +74,7 @@ pipeline {
                 always {
                     sh '''
                         echo 'Archiving results and stop...'
+                        docker cp zap:/juice-shop/results/sca-osv-scanner.json ${WORKSPACE}/results/sca-osv-scanner.json
                         archiveArtifacts artifacts: 'results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
                         docker stop juice-shop
                     '''
