@@ -61,6 +61,7 @@ pipeline {
                         bkimminich/juice-shop
                     ls -la results/
                     osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json
+                    echo 'After run osv-scanner ...'
                     ls -la results/
                     cat results/sca-osv-scanner.json
                     sleep 5
