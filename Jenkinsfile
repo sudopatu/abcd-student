@@ -123,7 +123,7 @@ pipeline {
                         echo 'Archiving results...'
                     '''
                     archiveArtifacts artifacts: '${WORKSPACE}/mirror_repo/raport.json', fingerprint: true, allowEmptyArchive: true
-                    // archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
                 }
             }
         }
