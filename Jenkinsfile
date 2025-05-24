@@ -50,16 +50,53 @@ pipeline {
         //        }
         //    }
         //}
-        stage('OSV scan') {
+//         stage('OSV scan') {
+//             steps {
+//                 sh 'mkdir -p results/'
+//                 sh '''
+//                     echo 'Run juice-shop...'
+//                     ls -la results/
+//                     docker run --name juice-shop -d --rm \
+//                         -p 3000:3000 \
+//                         bkimminich/juice-shop
+//                     osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
+//                 '''
+// //                                        
+// //                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
+// //                    echo "osv-scanner exited with code $?" & pwd &
+// //                    pid=$!
+// //                    echo "Scan completed" 
+// //                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
+// //                    wait $pid
+// //                    cat results/sca-osv-scanner.json & ls -la results/
+// //                    wait $!
+// //                    cat results/sca-osv-scanner.json
+// //                '''
+//             }
+//             post {
+//                 always {
+//                     sh '''
+//                         echo 'Archiving results and stop...'
+//                         ls -la ${WORKSPACE}
+//                         ls -la ${WORKSPACE}/results/
+//                         docker stop juice-shop
+//                     '''
+//                     archiveArtifacts artifacts: '${WORKSPACE}/results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
+//                     archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+//                 }
+//             }
+        stage('Trufflehog scan') {
             steps {
                 sh 'mkdir -p results/'
+                // sh '''
+                    // echo 'Run juice-shop...'
+                    // ls -la results/
+                    // docker run --name juice-shop -d --rm \
+                    //     -p 3000:3000 \
+                    //     bkimminich/juice-shop
+                    // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 sh '''
-                    echo 'Run juice-shop...'
-                    ls -la results/
-                    docker run --name juice-shop -d --rm \
-                        -p 3000:3000 \
-                        bkimminich/juice-shop
-                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
+                    trufflehog git file://. --since-commit main --only-verified --fail
                 '''
 //                                        
 //                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
@@ -73,18 +110,18 @@ pipeline {
 //                    cat results/sca-osv-scanner.json
 //                '''
             }
-            post {
-                always {
-                    sh '''
-                        echo 'Archiving results and stop...'
-                        ls -la ${WORKSPACE}
-                        ls -la ${WORKSPACE}/results/
-                        docker stop juice-shop
-                    '''
-                    archiveArtifacts artifacts: '${WORKSPACE}/results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
-                }
-            }
+            // post {
+            //     always {
+            //         sh '''
+            //             echo 'Archiving results and stop...'
+            //             ls -la ${WORKSPACE}
+            //             ls -la ${WORKSPACE}/results/
+            //             docker stop juice-shop
+            //         '''
+            //         archiveArtifacts artifacts: '${WORKSPACE}/results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
+            //         archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+            //     }
+            // }
         }
     }
 }
