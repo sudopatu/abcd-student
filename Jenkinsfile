@@ -98,6 +98,7 @@ pipeline {
                 sh '''
                     echo 'Run trufflehog...'
                     git clone --mirror 'https://github.com/sudopatu/abcd-student' mirror_repo
+                    ls -la mirror_repo/
                     trufflehog git file://mirror_repo/. --since-commit main --only-verified --bare
                 '''
 //                                        
