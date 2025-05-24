@@ -99,7 +99,7 @@ pipeline {
                 sh '''
                     echo 'Run trufflehog...'
 
-                    git clone --mirror 'https://github.com/sudopatu/abcd-student' mirror_repo
+                    git clone --mirror --branch main 'https://github.com/sudopatu/abcd-student' mirror_repo
                     cd mirror_repo/
                     ls -la
                     pwd
