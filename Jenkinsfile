@@ -85,14 +85,6 @@ pipeline {
 //                     archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
 //                 }
 //             }
-      stage('Code checkout from GitHub') {
-            steps {
-                script {
-                    cleanWs()
-                    git credentialsId: 'github-pat', url: 'https://github.com/sudopatu/abcd-student', branch: 'main', mirror: true
-                }
-            }
-        }
         stage('Trufflehog scan') {
             steps {
                 sh 'mkdir -p results/'
@@ -105,6 +97,7 @@ pipeline {
                     // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 sh '''
                     echo 'Run trufflehog...'
+                    git clone --mirror 'https://github.com/sudopatu/abcd-student'
                     trufflehog git file://. --since-commit main --only-verified --bare
                 '''
 //                                        
