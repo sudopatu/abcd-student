@@ -87,6 +87,7 @@ pipeline {
 //             }
         stage('Trufflehog scan') {
             steps {
+                sh 'rm -rf mirror_repo/'
                 sh 'mkdir -p mirror_repo/'
                 // sh '''
                     // echo 'Run juice-shop...'
