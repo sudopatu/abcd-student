@@ -98,9 +98,12 @@ pipeline {
                     // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 sh '''
                     echo 'Run trufflehog...'
+
                     git clone --mirror 'https://github.com/sudopatu/abcd-student' mirror_repo
-                    ls -la mirror_repo/
-                    trufflehog git file://mirror_repo/. --since-commit main --only-verified --bare
+                    cd mirror_repo/
+                    ls -la
+                    git status
+                    trufflehog git file://. --since-commit main --only-verified --bare
                 '''
 //                                        
 //                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
