@@ -103,7 +103,7 @@ pipeline {
                     cd mirror_repo/
                     ls -la
                     pwd
-                    trufflehog git file://. --since-commit main --only-verified --bare
+                    trufflehog git file://. --branch main --only-verified --bare  --json > raport.json
                 '''
 //                                        
 //                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
@@ -117,18 +117,15 @@ pipeline {
 //                    cat results/sca-osv-scanner.json
 //                '''
             }
-            // post {
-            //     always {
-            //         sh '''
-            //             echo 'Archiving results and stop...'
-            //             ls -la ${WORKSPACE}
-            //             ls -la ${WORKSPACE}/results/
-            //             docker stop juice-shop
-            //         '''
-            //         archiveArtifacts artifacts: '${WORKSPACE}/results/sca-osv-scanner.json', fingerprint: true, allowEmptyArchive: true
-            //         archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
-            //     }
-            // }
+            post {
+                always {
+                    sh '''
+                        echo 'Archiving results...'
+                    '''
+                    archiveArtifacts artifacts: '${WORKSPACE}/mirror_repo/raport.json', fingerprint: true, allowEmptyArchive: true
+                    // archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+                }
+            }
         }
     }
 }
