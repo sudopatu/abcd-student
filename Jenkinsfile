@@ -102,7 +102,7 @@ pipeline {
                     git clone --mirror 'https://github.com/sudopatu/abcd-student' mirror_repo
                     cd mirror_repo/
                     ls -la
-                    git status
+                    pwd
                     trufflehog git file://. --since-commit main --only-verified --bare
                 '''
 //                                        
