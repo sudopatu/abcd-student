@@ -87,7 +87,7 @@ pipeline {
 //             }
         stage('Trufflehog scan') {
             steps {
-                sh 'mkdir -p results/'
+                sh 'mkdir -p mirror_repo/'
                 // sh '''
                     // echo 'Run juice-shop...'
                     // ls -la results/
@@ -97,8 +97,8 @@ pipeline {
                     // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 sh '''
                     echo 'Run trufflehog...'
-                    git clone --mirror 'https://github.com/sudopatu/abcd-student'
-                    trufflehog git file://. --since-commit main --only-verified --bare
+                    git clone --mirror 'https://github.com/sudopatu/abcd-student' mirror_repo
+                    trufflehog git file://mirror_repo/. --since-commit main --only-verified --bare
                 '''
 //                                        
 //                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
