@@ -61,17 +61,6 @@ pipeline {
                         bkimminich/juice-shop
                     osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 '''
-//                                        
-//                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
-//                    echo "osv-scanner exited with code $?" & pwd &
-//                    pid=$!
-//                    echo "Scan completed" 
-//                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
-//                    wait $pid
-//                    cat results/sca-osv-scanner.json & ls -la results/
-//                    wait $!
-//                    cat results/sca-osv-scanner.json
-//                '''
             }
             post {
                 always {
@@ -85,17 +74,11 @@ pipeline {
                     archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
                 }
             }
+        }
         stage('Trufflehog scan') {
             steps {
                 sh 'rm -rf mirror_repo/'
                 sh 'mkdir -p mirror_repo/'
-                // sh '''
-                    // echo 'Run juice-shop...'
-                    // ls -la results/
-                    // docker run --name juice-shop -d --rm \
-                    //     -p 3000:3000 \
-                    //     bkimminich/juice-shop
-                    // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
                 sh '''
                     echo 'Run trufflehog...'
 
@@ -105,17 +88,7 @@ pipeline {
                     pwd
                     trufflehog git file://. --branch main --only-verified --bare  --json > raport.json
                 '''
-//                                        
-//                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
-//                    echo "osv-scanner exited with code $?" & pwd &
-//                    pid=$!
-//                    echo "Scan completed" 
-//                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
-//                    wait $pid
-//                    cat results/sca-osv-scanner.json & ls -la results/
-//                    wait $!
-//                    cat results/sca-osv-scanner.json
-//                '''
+
             }
             post {
                 always {
