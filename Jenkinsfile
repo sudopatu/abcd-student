@@ -45,9 +45,10 @@ pipeline {
                        docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
                        docker stop zap juice-shop
-                       docker rm zap
-                   '''
-               }
+                    '''
+                    archiveArtifacts artifacts: '${WORKSPACE}/results/zap_html_report.html', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+                }
            }
         }
         stage('OSV scan') {
