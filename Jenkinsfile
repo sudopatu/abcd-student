@@ -85,45 +85,64 @@ pipeline {
 //                     archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
 //                 }
 //             }
-        stage('Trufflehog scan') {
-            steps {
-                sh 'rm -rf mirror_repo/'
-                sh 'mkdir -p mirror_repo/'
-                // sh '''
-                    // echo 'Run juice-shop...'
-                    // ls -la results/
-                    // docker run --name juice-shop -d --rm \
-                    //     -p 3000:3000 \
-                    //     bkimminich/juice-shop
-                    // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
-                sh '''
-                    echo 'Run trufflehog...'
+//         stage('Trufflehog scan') {
+//             steps {
+//                 sh 'rm -rf mirror_repo/'
+//                 sh 'mkdir -p mirror_repo/'
+//                 // sh '''
+//                     // echo 'Run juice-shop...'
+//                     // ls -la results/
+//                     // docker run --name juice-shop -d --rm \
+//                     //     -p 3000:3000 \
+//                     //     bkimminich/juice-shop
+//                     // osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json 
+//                 sh '''
+//                     echo 'Run trufflehog...'
 
-                    git clone --mirror --branch main 'https://github.com/sudopatu/abcd-student' mirror_repo
-                    cd mirror_repo/
-                    ls -la
-                    pwd
-                    trufflehog git file://. --branch main --only-verified --bare  --json > raport.json
+//                     git clone --mirror --branch main 'https://github.com/sudopatu/abcd-student' mirror_repo
+//                     cd mirror_repo/
+//                     ls -la
+//                     pwd
+//                     trufflehog git file://. --branch main --only-verified --bare  --json > raport.json
+//                 '''
+// //                                        
+// //                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
+// //                    echo "osv-scanner exited with code $?" & pwd &
+// //                    pid=$!
+// //                    echo "Scan completed" 
+// //                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
+// //                    wait $pid
+// //                    cat results/sca-osv-scanner.json & ls -la results/
+// //                    wait $!
+// //                    cat results/sca-osv-scanner.json
+// //                '''
+//             }
+//             post {
+//                 always {
+//                     sh '''
+//                         echo 'Archiving results...'
+//                     '''
+//                     archiveArtifacts artifacts: 'mirror_repo/raport.json', fingerprint: true, allowEmptyArchive: true
+//                     // archiveArtifacts artifacts: 'mirror_repo/**/*', fingerprint: true, allowEmptyArchive: true
+//                 }
+//             }
+//         }
+        stage('Semgrep scan') {
+            steps {
+                sh 'rm -rf semgrep_results/'
+                sh 'mkdir -p semgrep_results/'
+                sh '''
+                    echo 'Run semogrep...'
+                    semgrep scan --config auto --json --output semgrep_results/semgrep.json
+                    ls -la semgrep_results/
                 '''
-//                                        
-//                    osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json &
-//                    echo "osv-scanner exited with code $?" & pwd &
-//                    pid=$!
-//                    echo "Scan completed" 
-//                    echo "Waiting for osv-scanner process (PID $pid) to finish..."
-//                    wait $pid
-//                    cat results/sca-osv-scanner.json & ls -la results/
-//                    wait $!
-//                    cat results/sca-osv-scanner.json
-//                '''
             }
             post {
                 always {
                     sh '''
                         echo 'Archiving results...'
                     '''
-                    archiveArtifacts artifacts: 'mirror_repo/raport.json', fingerprint: true, allowEmptyArchive: true
-                    // archiveArtifacts artifacts: 'mirror_repo/**/*', fingerprint: true, allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'semgrep_results/semgrep.json', fingerprint: true, allowEmptyArchive: true
                 }
             }
         }
